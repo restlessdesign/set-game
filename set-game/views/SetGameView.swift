@@ -1,3 +1,10 @@
+//
+//  ContentView.swift
+//  set-game
+//
+//  Created by Kevin Sweeney on 4/7/24.
+//
+
 import SwiftUI
 
 struct SetGameView: View {

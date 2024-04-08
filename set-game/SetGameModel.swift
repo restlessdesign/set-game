@@ -1,6 +1,6 @@
 import Foundation
 
-struct SetGame {
+struct SetGameModel {
     private var deck: [SetCard]
     private(set) var cardsInPlay: [SetCard]
     
