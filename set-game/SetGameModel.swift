@@ -33,7 +33,7 @@ struct SetGameModel {
     }
     
     mutating func deal(cardsToDraw cardCount: Int = 3) -> Void {
-        for i in 0..<cardCount {
+        for _ in 0..<cardCount {
             cardsInPlay.append(deck.removeFirst())
         }
     }
