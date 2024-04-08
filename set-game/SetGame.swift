@@ -29,17 +29,13 @@ struct SetGame {
         }
         
         deck.shuffle()
-        cardsInPlay = cardsInPlay + deal(cardsToDraw: 12)
+        deal(cardsToDraw: 12)
     }
     
-    func deal(cardsToDraw cardCount: Int = 3) -> [SetCard] {
-        var cardsDealt: [SetCard] = []
-        
+    mutating func deal(cardsToDraw cardCount: Int = 3) -> Void {
         for i in 0..<cardCount {
-            // TODO: take N cards from the active deck and put them into play
+            cardsInPlay.append(deck.removeFirst())
         }
-        
-        return cardsDealt
     }
     
     func checkIfSet(_ a: SetCard, _ b: SetCard, _ c: SetCard) -> Bool {
