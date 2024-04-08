@@ -4,16 +4,11 @@ struct SetGameModel {
     let cardsInASet = 3
     let initialDrawAmount = 12
     
-    private let numberOfShapes = [1, 2, 3]
-    private let shapeTypes = SetShape.allCases
-    private let shadingTypes = SetShading.allCases
-    private let colors = SetColor.allCases
+    private var standardDeck: [Card] = []
     
-    private var standardDeck: [SetCard] = []
-    
-    private(set) var activeDeck: [SetCard] = []
-    private(set) var cardsInPlay: [SetCard] = []
-    private(set) var selectedCards: [SetCard] = []
+    private(set) var currentDeck: [Card] = []
+    private(set) var cardsInPlay: [Card] = []
+    private(set) var selectedCards: [Card] = []
     
     init() {
         standardDeck = buildDeck()
@@ -21,21 +16,26 @@ struct SetGameModel {
     }
     
     mutating func startNewGame() -> Void {
-        activeDeck = standardDeck.shuffled()
+        currentDeck = standardDeck.shuffled()
         cardsInPlay = []
         selectedCards = []
         
         deal(cardsToDraw: initialDrawAmount)
     }
     
-    func buildDeck() -> [SetCard] {
-        var deck: [SetCard] = []
+    func buildDeck() -> [Card] {
+        let numberOfShapes = [1, 2, 3]
+        let shapeTypes = Shape.allCases
+        let shadingTypes = Shading.allCases
+        let colors = Color.allCases
+        
+        var deck: [Card] = []
         
         for number in numberOfShapes {
             for shapeType in shapeTypes {
                 for shadingType in shadingTypes {
                     for color in colors {
-                        deck.append(SetCard(
+                        deck.append(Card(
                             number: number,
                             shape: shapeType,
                             shading: shadingType,
@@ -50,16 +50,16 @@ struct SetGameModel {
     }
     
     mutating func deal(cardsToDraw cardCount: Int? = nil) -> Void {
-        var drawAmount = cardCount ?? cardsInASet
+        let drawAmount = cardCount ?? cardsInASet
         for _ in 0..<drawAmount {
-            cardsInPlay.append(activeDeck.removeFirst())
+            cardsInPlay.append(currentDeck.removeFirst())
         }
     }
     
-    mutating func select(card: SetCard) -> Void {
+    mutating func select(card: Card) -> Void {
         if selectedCards.count == cardsInASet {
             if hasMadeASet(selectedCards[0], selectedCards[1], selectedCards[2]) {
-                for selectedCard in selectedCards {
+                for card in selectedCards {
                     if let i = cardsInPlay.firstIndex(of: card) {
                         cardsInPlay.remove(at: i)
                     }
@@ -76,7 +76,7 @@ struct SetGameModel {
         }
     }
     
-    mutating func deselect(card: SetCard) -> Void {
+    mutating func deselect(card: Card) -> Void {
         if selectedCards.count < cardsInASet {
             if let i = selectedCards.firstIndex(of: card) {
                 selectedCards.remove(at: i)
@@ -84,7 +84,7 @@ struct SetGameModel {
         }
     }
     
-    func hasMadeASet(_ a: SetCard, _ b: SetCard, _ c: SetCard) -> Bool {
+    func hasMadeASet(_ a: Card, _ b: Card, _ c: Card) -> Bool {
         // TODO: Break this logic into smaller parts or find a way to generalize
         // They all have the same number or have three different numbers
         return (
@@ -107,23 +107,23 @@ struct SetGameModel {
             (a.color != b.color && a.color != c.color && b.color != c.color)
         )
     }
-}
+    
+    struct Card: Equatable {
+        let number: Int
+        let shape: Shape
+        let shading: Shading
+        let color: Color
+    }
 
-struct SetCard: Equatable {
-    let number: Int
-    let shape: SetShape
-    let shading: SetShading
-    let color: SetColor
-}
+    enum Shape: CaseIterable {
+        case diamond, squiggle, oval
+    }
 
-enum SetShape: CaseIterable {
-    case diamond, squiggle, oval
-}
+    enum Shading: CaseIterable {
+        case solid, striped, open
+    }
 
-enum SetShading: CaseIterable {
-    case solid, striped, open
-}
-
-enum SetColor: CaseIterable {
-    case red, green, purple
+    enum Color: CaseIterable {
+        case red, green, purple
+    }
 }
