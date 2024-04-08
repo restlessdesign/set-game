@@ -1,13 +1,6 @@
-//
-//  ContentView.swift
-//  set-game
-//
-//  Created by Kevin Sweeney on 4/7/24.
-//
-
 import SwiftUI
 
-struct ContentView: View {
+struct SetGameView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +13,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    SetGameView()
 }
