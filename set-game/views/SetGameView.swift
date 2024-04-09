@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SetGameView: View {
+    @ObservedObject var viewModel: SetGameViewModel
+    
     var body: some View {
         VStack {
             header
@@ -21,7 +23,7 @@ struct SetGameView: View {
     var header: some View {
         VStack {
             Button("New Game", systemImage: "folder.fill.badge.plus") {
-                print("New game")
+                viewModel.newGame()
             }
             .buttonStyle(.bordered)
             .controlSize(.mini)
@@ -30,15 +32,17 @@ struct SetGameView: View {
     }
     
     var gameArea: some View {
-        VStack {
-            Text("TODO")
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 50, maximum: 90))]) {
+            ForEach(viewModel.cardsInPlay) { card in
+                CardView(card)
+            }
         }
     }
     
     var gameActions: some View {
         Group {
             Button {
-                print("Deal")
+                viewModel.deal()
             } label: {
                 Text("Deal")
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
@@ -47,12 +51,12 @@ struct SetGameView: View {
             .font(.title2)
             .fontWeight(.bold)
             .controlSize(.large)
-            .disabled(true)
+            .disabled(false)
         }
         .padding(.horizontal, 50)
     }
 }
 
 #Preview {
-    SetGameView()
+    SetGameView(viewModel: SetGameViewModel())
 }

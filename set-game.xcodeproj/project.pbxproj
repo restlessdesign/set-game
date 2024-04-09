@@ -13,6 +13,7 @@
 		32221C022BC3859B00C1AB11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32221C012BC3859B00C1AB11 /* Preview Assets.xcassets */; };
 		32221C0B2BC386D600C1AB11 /* SetGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32221C0A2BC386D600C1AB11 /* SetGameModel.swift */; };
 		32221C0F2BC44F7B00C1AB11 /* SetGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32221C0E2BC44F7B00C1AB11 /* SetGameViewModel.swift */; };
+		32221C112BC4CBCD00C1AB11 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32221C102BC4CBCD00C1AB11 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		32221C012BC3859B00C1AB11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		32221C0A2BC386D600C1AB11 /* SetGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameModel.swift; sourceTree = "<group>"; };
 		32221C0E2BC44F7B00C1AB11 /* SetGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameViewModel.swift; sourceTree = "<group>"; };
+		32221C102BC4CBCD00C1AB11 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				32221BFC2BC3859A00C1AB11 /* SetGameView.swift */,
+				32221C102BC4CBCD00C1AB11 /* CardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32221BFD2BC3859A00C1AB11 /* SetGameView.swift in Sources */,
+				32221C112BC4CBCD00C1AB11 /* CardView.swift in Sources */,
 				32221C0B2BC386D600C1AB11 /* SetGameModel.swift in Sources */,
 				32221BFB2BC3859A00C1AB11 /* SetApp.swift in Sources */,
 				32221C0F2BC44F7B00C1AB11 /* SetGameViewModel.swift in Sources */,

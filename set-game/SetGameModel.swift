@@ -2,7 +2,7 @@ import Foundation
 
 struct SetGameModel {
     let cardsInASet = 3
-    let initialDrawAmount = 12
+    let initialDrawAmount = 1
     
     private var standardDeck: [Card] = []
     
@@ -108,19 +108,44 @@ struct SetGameModel {
         )
     }
     
-    struct Card: Equatable {
+    struct Card: Identifiable, Equatable, CustomDebugStringConvertible {
         let number: Int
         let shape: Shape
         let shading: Shading
         let color: Color
+        
+        var id: String {
+            "\(number)\(shape)\(shading)\(color)"
+        }
+        
+        var debugDescription: String {
+            "(\(number), \(shape), \(shading), \(color))"
+        }
+        
     }
 
-    enum Shape: CaseIterable {
+    enum Shape: CaseIterable, CustomDebugStringConvertible {
         case diamond, squiggle, oval
+        
+        var debugDescription: String {
+            switch self {
+            case .diamond: "◆"
+            case .squiggle: "~"
+            case .oval: "O"
+            }
+        }
     }
 
-    enum Shading: CaseIterable {
+    enum Shading: CaseIterable, CustomDebugStringConvertible {
         case solid, striped, open
+        
+        var debugDescription: String {
+            switch self {
+            case .solid: "◼"
+            case .striped: "░"
+            case .open: "▢"
+            }
+        }
     }
 
     enum Color: CaseIterable {

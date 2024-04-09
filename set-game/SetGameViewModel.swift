@@ -20,4 +20,15 @@ class SetGameViewModel: ObservableObject {
     }
     
     // MARK: - Intents
+    
+    func newGame() {
+        print("New Game")
+        model = SetGameViewModel.createSetGame()
+    }
+    
+    func deal() {
+        print("Deal")
+        model.deal()
+        print(cardsInPlay)
+    }
 }
