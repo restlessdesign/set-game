@@ -46,6 +46,8 @@ struct SetGameModel {
             }
         }
         
+        precondition(cardsInPlay.count <= 81, "No more than 81 cards should exist in a deck")
+        
         return deck
     }
     
@@ -54,6 +56,8 @@ struct SetGameModel {
         for _ in 0..<drawAmount {
             cardsInPlay.append(currentDeck.removeFirst())
         }
+        
+        precondition(cardsInPlay.count <= 81, "No more than 81 cards should exist in a deck")
     }
     
     mutating func select(card: Card) -> Void {
@@ -131,7 +135,7 @@ struct SetGameModel {
             switch self {
             case .diamond: "◆"
             case .squiggle: "~"
-            case .oval: "O"
+            case .oval: "⏺︎"
             }
         }
     }
