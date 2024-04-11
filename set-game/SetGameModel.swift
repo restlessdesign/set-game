@@ -2,39 +2,30 @@ import Foundation
 
 struct SetGameModel {
     let cardsInASet = 3
-    let initialDrawAmount = 1
+    let initialDrawAmount = 12
+    
+    let minShapes = 1
+    let maxShapes = 3
     
     private var standardDeck: [Card] = []
     
     private(set) var currentDeck: [Card] = []
     private(set) var cardsInPlay: [Card] = []
-    private(set) var selectedCards: [Card] = []
     
     init() {
         standardDeck = buildDeck()
         startNewGame()
     }
     
-    mutating func startNewGame() -> Void {
-        currentDeck = standardDeck.shuffled()
-        cardsInPlay = []
-        selectedCards = []
-        
-        deal(cardsToDraw: initialDrawAmount)
-    }
-    
+    /// Constructs a standard 81-card Set deck based off the permutations.
+    /// - Returns: An array of 81 unique Set cards
     func buildDeck() -> [Card] {
-        let numberOfShapes = [1, 2, 3]
-        let shapeTypes = Shape.allCases
-        let shadingTypes = Shading.allCases
-        let colors = Color.allCases
-        
         var deck: [Card] = []
         
-        for number in numberOfShapes {
-            for shapeType in shapeTypes {
-                for shadingType in shadingTypes {
-                    for color in colors {
+        for number in minShapes...maxShapes {
+            for shapeType in Shape.allCases {
+                for shadingType in Shading.allCases {
+                    for color in Color.allCases {
                         deck.append(Card(
                             number: number,
                             shape: shapeType,
@@ -46,49 +37,63 @@ struct SetGameModel {
             }
         }
         
-        precondition(cardsInPlay.count <= 81, "No more than 81 cards should exist in a deck")
+        precondition(cardsInPlay.count != 81, "A Set deck should contain exactly 81 cards")
         
         return deck
     }
     
-    mutating func deal(cardsToDraw cardCount: Int? = nil) -> Void {
-        let drawAmount = cardCount ?? cardsInASet
-        for _ in 0..<drawAmount {
-            cardsInPlay.append(currentDeck.removeFirst())
-        }
+    /// Creates a copy of our standard deck, shuffles it, then deals 12 cards to a fresh game board.
+    mutating func startNewGame() {
+        currentDeck = standardDeck.shuffled()
+        cardsInPlay = []
         
-        precondition(cardsInPlay.count <= 81, "No more than 81 cards should exist in a deck")
+        deal(cardsToDraw: initialDrawAmount)
     }
     
-    mutating func select(card: Card) -> Void {
-        if selectedCards.count == cardsInASet {
-            if hasMadeASet(selectedCards[0], selectedCards[1], selectedCards[2]) {
-                for card in selectedCards {
-                    if let i = cardsInPlay.firstIndex(of: card) {
-                        cardsInPlay.remove(at: i)
+    /// Takes a given amount of cards from the deck and puts them into play.
+    /// - Parameter cardCount: A new game should draw 12 cards. Subsequent draws should be 3.
+    mutating func deal(cardsToDraw cardCount: Int? = nil) {
+        cardsInPlay.append(contentsOf: currentDeck.prefix(cardCount ?? cardsInASet))
+    }
+    
+    mutating func select(_ card: Card) {
+        let selectedCards = cardsInPlay.filter({ $0.isSelected })
+        
+        if let chosenIndex = cardsInPlay.firstIndex(where: { $0 == card }) {
+            if selectedCards.count < cardsInASet {
+                cardsInPlay[chosenIndex].isSelected.toggle()
+            }
+            else {
+                if setHasBeenMade(forCards: selectedCards) {
+                    // If the 3 selected cards are matching, replace them with new ones from the deck (if there are any left)
+                    // TODO: Rather than dealing to the bottom of the board, replace the cards in their original positions
+                    for card in selectedCards {
+                        if let i = cardsInPlay.firstIndex(of: card) {
+                            cardsInPlay.remove(at: i)
+                        }
+                    }
+                    
+                    deal()
+                    
+                    // If the selected card was NOT in set of selected cards, select it
+                    if !selectedCards.contains(card) {
+                        cardsInPlay[chosenIndex].isSelected = true
+                    }
+                }
+                else {
+                    // If no set was made, deselect all cards except the one that was just picked
+                    for index in cardsInPlay.indices {
+                        cardsInPlay[index].isSelected = (index == chosenIndex)
                     }
                 }
                 
-                deal()
-            }
-            else {
-                selectedCards = [card]
-            }
-        }
-        else {
-            selectedCards.append(card)
-        }
-    }
-    
-    mutating func deselect(card: Card) -> Void {
-        if selectedCards.count < cardsInASet {
-            if let i = selectedCards.firstIndex(of: card) {
-                selectedCards.remove(at: i)
             }
         }
     }
     
-    func hasMadeASet(_ a: Card, _ b: Card, _ c: Card) -> Bool {
+    func setHasBeenMade(forCards cards: [Card]) -> Bool {
+        let a = cards[0], b = cards[1], c = cards[2]
+        
         // TODO: Break this logic into smaller parts or find a way to generalize
         // They all have the same number or have three different numbers
         return (
@@ -117,6 +122,8 @@ struct SetGameModel {
         let shape: Shape
         let shading: Shading
         let color: Color
+        
+        var isSelected: Bool = false
         
         var id: String {
             "\(number)\(shape)\(shading)\(color)"

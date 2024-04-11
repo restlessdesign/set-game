@@ -15,20 +15,25 @@ class SetGameViewModel: ObservableObject {
         model.cardsInPlay
     }
     
-    var selectedCards: [SetGameModel.Card] {
-        model.selectedCards
-    }
-    
     // MARK: - Intents
     
     func newGame() {
-        print("New Game")
+        print("\nNew Game")
         model = SetGameViewModel.createSetGame()
     }
     
     func deal() {
-        print("Deal")
+        print("\nDeal")
         model.deal()
+        
+        print("--------------------------------------")
+        print("Cards in play:")
         print(cardsInPlay)
+        print("--------------------------------------")
+    }
+    
+    func select(_ card: SetGameModel.Card) {
+        print("\nSelect", card)
+        model.select(card)
     }
 }
