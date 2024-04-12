@@ -53,7 +53,9 @@ struct SetGameModel {
     /// Takes a given amount of cards from the deck and puts them into play.
     /// - Parameter cardCount: A new game should draw 12 cards. Subsequent draws should be 3.
     mutating func deal(cardsToDraw cardCount: Int? = nil) {
-        cardsInPlay.append(contentsOf: currentDeck.prefix(cardCount ?? cardsInASet))
+        let drawAmount = cardCount ?? cardsInASet
+        cardsInPlay.append(contentsOf: currentDeck.prefix(drawAmount))
+        currentDeck.removeFirst(drawAmount)
     }
     
     mutating func select(_ card: Card) {

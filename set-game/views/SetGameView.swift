@@ -32,12 +32,14 @@ struct SetGameView: View {
     }
     
     var gameArea: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 50, maximum: 90))]) {
-            ForEach(viewModel.cardsInPlay) { card in
-                CardView(card)
-                    .onTapGesture {
-                        viewModel.select(card)
-                    }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 50, maximum: 90))]) {
+                ForEach(viewModel.cardsInPlay) { card in
+                    CardView(card)
+                        .onTapGesture {
+                            viewModel.select(card)
+                        }
+                }
             }
         }
     }
